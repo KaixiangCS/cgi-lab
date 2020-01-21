@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import cgi
 import cgitb
-cgitb.enable()
 from templates import login_page, secret_page, after_login_incorrect
 import os
 import secret
@@ -13,7 +12,7 @@ print("Content-Type: text/html\n")
 
 #print(os.environ)
 
-print(login_page())
+#print(login_page())
 s = cgi.FieldStorage()
 username = s.getfirst("username")
 password = s.getfirst("password")
@@ -35,13 +34,17 @@ cookie_ok = c_username == secret.username and c_password == secret.c_password
 if cookie_ok:
     username = c_username
     password = c_password
-print()
+
+if form_ok:
+    print("Set-Cookie: username= ", username)
+    print("Set-Cookie: password= ", password)
+#print()
 
 #question6
 
 if not username and not password:
-    print(login_pages())
-elif username == secret,username and password == secret.password:
+    print(login_page())
+elif username == secret.username and password == secret.password:
     print(secret_page(username,password))
 else:
     print(after_login_incorrect())
